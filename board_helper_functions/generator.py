@@ -9,13 +9,16 @@ def generate_board():
     for row in xrange(board.rows):
         board_row = []
         for col in xrange(board.cols):
-            board_row.append(board.problem[row, col])
+            if board.problem[row, col] == " ":
+                board_row.append(0)
+            else:
+                board_row.append(board.problem[row, col])
         board_list.append(board_row)
 
     with open("boardpickle/board-file.pickle", 'wb') as f:
         pickle.dump(board, f)
 
-    return {"board": board_list}
+    return board_list
 
 
 def solved_board():

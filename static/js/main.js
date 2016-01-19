@@ -1,78 +1,89 @@
 $(function() {
 
+
     var Board = React.createClass({
         getInitialState: function(){ 
-            return {boardLayout: 1, numberSelected: null};
+            return {initialBoard: [[1,2,3,4,5,6,7,8,9],
+                                    [1,2,3,4,5,6,7,8,9],
+                                    [1,2,3,4,5,6,7,8,9],
+                                    [1,2,3,4,5,6,7,8,9],
+                                    [1,2,3,4,5,6,7,8,9],
+                                    [1,2,3,4,5,6,7,8,9],
+                                    [1,2,3,4,5,6,7,8,9],
+                                    [1,2,3,4,5,6,7,8,9],
+                                    [1,2,3,4,5,6,7,8,9]], numberSelected: null, test: 0, currentBoard:[[1,2,3,4,5,6,7,8,9],[1,2,3,4,5,6,7,8,9],[1,2,3,4,5,6,7,8,9],[1,2,3,4,5,6,7,8,9],[1,2,3,4,5,6,7,8,9],[1,2,3,4,5,6,7,8,9],[1,2,3,4,5,6,7,8,9],[1,2,3,4,5,6,7,8,9],[1,2,3,4,5,6,7,8,9]]};
         },
 
         numberSelected: function(number){
             this.setState({numberSelected: number});
-            console.log("number selected is"+this.state.numberSelected);
         },
 
-        componentDidMount: function(){
+        componentWillMount: function(){
             $.get("/problem-generator.json", function(data){
-                this.setState({boardLayout : JSON.parse(data).board});
-            }.bind(this));
-            console.log("hi");
-            console.log("layout "+this.state.boardLayout);
-        },
+                // check that the component is still mounted before updating its state
+                if (this.isMounted()){
+                    this.setState({initialBoard: JSON.parse(data)});
+                    this.setState({currentBoard: JSON.parse(data)});
 
+                    console.log("in compo"+JSON.parse(data).board);
+                    console.log("in compo"+data);
+
+                    }
+                }.bind(this));
+                
+            console.log("hi");
+            console.log("layout "+this.state.initialBoard);
+        },
+        update: function(row, column, value){
+            var current = this.state.currentBoard;
+            current[row][column] = value;
+            this.setState({currentBoard: current});
+        },
         render: function(){
-            var num = this.state.numberSelected;
-            var board = this.state.boardLayout;
-            console.log("BOARD IS"+ board);
-            var counter = 0;
+
+            var displayBoard = [];
+            for (var row=0; row<9; row++){
+                // displayRow.push(<div>);
+                for (var col=0; col<9; col++){
+                    displayBoard.push(<Cell row={row} col={col} innerValue={this.state.initialBoard[row][col]} value={this.state.currentBoard[row][col]} numSelected={this.state.numberSelected}/>);
+                }
+            }
             return (
                 <div>
-                    <div id='board'>
-                    {this.state.boardLayout.map(function(val1) {
-                        return (
-                          <div id='board-row'>
-                            {val1.map(function(val2) {
-                                counter += 1;
-                                return <Cell row={board.indexOf(val1)} id={counter} key={counter} col={val1.indexOf(val2)} innerValue={val2} permanent={permanent} value={val2} numSelected={num}/>;
-                            })}
-                          </div>
-                        );
-                      })}
-                    </div>
+                    <div>{displayBoard}</div>
                     <div>
                         <Numbers numSelected={this.numberSelected}/>
                     </div>
-                // </div>
+                </div>
             );
 
         }
     });
-    
 
     var Cell = React.createClass({
-        getInitialState: function(){
-            var row = this.props.row;
-            var column = this.props.col;
-            var value = this.showValue(row, column, this.props.innerValue);
-            var permanentBoolean;
-            if(value===0){
-                permanentBoolean = false;
-                }else{
-                permanentBoolean = true;
-            }
-            return {permanent: permanentBoolean, value: value}
 
-        },
         clickedCell: function(evt){
+            console.log("clicked");
+            console.log("this state perm"+this.state.permanent);
+            console.log("this porps valu"+this.props.value);
             if (this.props.numSelected && this.state.permanent === false){
+                console.log('change')
                 // $(evt.target).attr("disabled",true);
-                evt.target.innerHTML = this.props.numSelected;
+                // evt.target.innerHTML = this.props.numSelected;
+                this.props.value = this.props.numSelected;
+                // this.props.updateBoard(1,2,3);
+                // this.props.updateBoard(this.props.row, this.props.column, this.props.numSelected);
                 // $(evt.target).val(this.props.numberSelected);
             }
         },
 
+        getInitialState: function(){
+            return {permanent: (this.props.value == "0" ? false : true)}
+        },
 
         render: function(){
          
-            return <button onClick={this.clickedCell}>{this.state.value}</button>
+            return <button onClick={this.clickedCell}>{this.props.value}</button>
         }
 
 
