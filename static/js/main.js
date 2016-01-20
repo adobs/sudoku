@@ -3,15 +3,7 @@ $(function() {
 
     var Board = React.createClass({
         getInitialState: function(){ 
-            return {initialBoard: [[1,2,3,4,5,6,7,8,9],
-                                    [1,2,3,4,5,6,7,8,9],
-                                    [1,2,3,4,5,6,7,8,9],
-                                    [1,2,3,4,5,6,7,8,9],
-                                    [1,2,3,4,5,6,7,8,9],
-                                    [1,2,3,4,5,6,7,8,9],
-                                    [1,2,3,4,5,6,7,8,9],
-                                    [1,2,3,4,5,6,7,8,9],
-                                    [1,2,3,4,5,6,7,8,9]], numberSelected: null, test: 0, currentBoard:[[1,2,3,4,5,6,7,8,9],[1,2,3,4,5,6,7,8,9],[1,2,3,4,5,6,7,8,9],[1,2,3,4,5,6,7,8,9],[1,2,3,4,5,6,7,8,9],[1,2,3,4,5,6,7,8,9],[1,2,3,4,5,6,7,8,9],[1,2,3,4,5,6,7,8,9],[1,2,3,4,5,6,7,8,9]]};
+            return {initialBoard: null, numberSelected: null, won: false, currentBoard: null}
         },
 
         numberSelected: function(number){
@@ -34,31 +26,74 @@ $(function() {
             console.log("hi");
             console.log("layout "+this.state.initialBoard);
         },
+
         update: function(row, column, value){
             var current = this.state.currentBoard;
             current[row][column] = value;
             this.setState({currentBoard: current});
         },
-        render: function(){
 
+        Check: function(){
+            $("/solved-board.json", function(data){
+                if(JSON.parse(data)===this.state.currentBoard){
+                    this.setState({won: true});
+                }
+            });
+
+        },
+
+        render: function(){
             var displayBoard = [];
-            for (var row=0; row<9; row++){
-                // displayRow.push(<div>);
-                for (var col=0; col<9; col++){
-                    displayBoard.push(<Cell row={row} col={col} innerValue={this.state.initialBoard[row][col]} value={this.state.currentBoard[row][col]} numSelected={this.state.numberSelected}/>);
+            if (this.state.initialBoard !== null && this.state.currentBoard !== null){
+                for (var row=0; row<9; row++){
+                    displayBoard.push(<Row row={row} innerValue={this.state.initialBoard[row]} value={this.state.currentBoard[row]} numSelected={this.state.numberSelected}/>);
                 }
             }
             return (
                 <div>
-                    <div>{displayBoard}</div>
+                    <table><tbody>{displayBoard}</tbody></table>
                     <div>
                         <Numbers numSelected={this.numberSelected}/>
                     </div>
+                    <div>
+                        <Check checkBoard={this.check} won={this.state.won}/>
+                    </div>
+
                 </div>
             );
 
         }
     });
+    
+    var Row = React.createClass({
+
+        render: function(){
+            var displayRow= [];
+            for (var col=0; col<9; col++){
+                displayRow.push(<Cell row={this.props.row} col={col} innerValue={this.props.innerValue[col]} value={this.props.value[col]} numSelected={this.props.numSelected}/>);
+            }
+            return (
+                <tr>{displayRow}</tr>
+
+            );
+
+        }
+    });
+
+    var Check = React.createClass({
+
+        check: function(){
+            this.props.checkBoard;
+            if (this.props.won){
+                alert("YOU WON");
+            }
+
+        },
+        render: function(){
+            return <button onClick={this.check}>Check Answer</button>;
+        }
+    });
+
 
     var Cell = React.createClass({
 
@@ -69,8 +104,8 @@ $(function() {
             if (this.props.numSelected && this.state.permanent === false){
                 console.log('change')
                 // $(evt.target).attr("disabled",true);
-                // evt.target.innerHTML = this.props.numSelected;
-                this.props.value = this.props.numSelected;
+                evt.target.innerHTML = this.props.numSelected;
+                // this.props.value = this.props.numSelected;
                 // this.props.updateBoard(1,2,3);
                 // this.props.updateBoard(this.props.row, this.props.column, this.props.numSelected);
                 // $(evt.target).val(this.props.numberSelected);
@@ -78,12 +113,12 @@ $(function() {
         },
 
         getInitialState: function(){
-            return {permanent: (this.props.value == "0" ? false : true)}
+            return {permanent: (this.props.value == 0 ? false : true)}
         },
 
         render: function(){
          
-            return <button onClick={this.clickedCell}>{this.props.value}</button>
+            return <td><button onClick={this.clickedCell}>{this.props.value}</button></td>
         }
 
 
