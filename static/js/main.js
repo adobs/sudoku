@@ -1,6 +1,5 @@
 $(function() {
 
-
     var Board = React.createClass({
         getInitialState: function(){ 
             return {initialBoard: null, numberSelected: null, won: false, currentBoard: null}
@@ -17,14 +16,8 @@ $(function() {
                     this.setState({initialBoard: JSON.parse(data)});
                     this.setState({currentBoard: JSON.parse(data)});
 
-                    console.log("in compo"+JSON.parse(data).board);
-                    console.log("in compo"+data);
-
                     }
                 }.bind(this));
-                
-            console.log("hi");
-            console.log("layout "+this.state.initialBoard);
         },
 
         update: function(row, column, value){
@@ -33,7 +26,7 @@ $(function() {
             this.setState({currentBoard: current});
         },
 
-        Check: function(){
+        check: function(){
             $("/solved-board.json", function(data){
                 if(JSON.parse(data)===this.state.currentBoard){
                     this.setState({won: true});
@@ -89,6 +82,7 @@ $(function() {
             }
 
         },
+        
         render: function(){
             return <button onClick={this.check}>Check Answer</button>;
         }
@@ -117,8 +111,14 @@ $(function() {
         },
 
         render: function(){
-         
-            return <td><button onClick={this.clickedCell}>{this.props.value}</button></td>
+            var cellDimension = ($(window).height()-100)/10;
+            var style={width:cellDimension, height:cellDimension, fontSize:cellDimension, lineHeight:".75em" };
+            if (this.state.permanent === true){
+                style.fontWeight ="bold";
+            }else{
+                style.color="grey";
+            }
+            return <td><button style={style} onClick={this.clickedCell}>{this.props.value}</button></td>
         }
 
 
@@ -129,17 +129,20 @@ $(function() {
             this.props.numSelected(evt.target.innerHTML);
         },
         render: function(){
+            var cellDimension = ($(window).height()-100)/11;                  ;
+            var style={width:cellDimension, height:cellDimension, fontSize:cellDimension, lineHeight:".75em", marginTop:20};
             return (
                 <div>
-                    <button onClick={this.changeNumber}>1</button>
-                    <button onClick={this.changeNumber}>2</button>
-                    <button onClick={this.changeNumber}>3</button>
-                    <button onClick={this.changeNumber}>4</button>
-                    <button onClick={this.changeNumber}>5</button>
-                    <button onClick={this.changeNumber}>6</button>
-                    <button onClick={this.changeNumber}>7</button>
-                    <button onClick={this.changeNumber}>8</button>
-                    <button onClick={this.changeNumber}>9</button>
+                    <button style={style} onClick={this.changeNumber}> </button>
+                    <button style={style} onClick={this.changeNumber}>1</button>
+                    <button style={style} onClick={this.changeNumber}>2</button>
+                    <button style={style} onClick={this.changeNumber}>3</button>
+                    <button style={style} onClick={this.changeNumber}>4</button>
+                    <button style={style} onClick={this.changeNumber}>5</button>
+                    <button style={style} onClick={this.changeNumber}>6</button>
+                    <button style={style} onClick={this.changeNumber}>7</button>
+                    <button style={style} onClick={this.changeNumber}>8</button>
+                    <button style={style} onClick={this.changeNumber}>9</button>
                 </div>
             );
 

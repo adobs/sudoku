@@ -3,16 +3,22 @@
 <head>
     <title></title>
     <style type="text/css">
-        #block-9, #board{
-            display: inline;
-            float: left;
+        tr:nth-child(3n){
+            border-bottom: 4px black solid;
+        }
+        td:nth-child(3n){
+            border-right: 4px black solid;
+        }
+        table { 
+            border-collapse: collapse; 
+            border: 4px black solid;
+        }
+        td{
+            padding:0;
         }
 
-        .board-row{
-            border: 1px solid black;
-        }
     </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.6/react.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.6/react.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.6/react-dom.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
@@ -23,7 +29,7 @@
 </head>
 <body>
     <h1>hello</h1>
-    <div id='sudoku'></div>
+    <div id='sudoku'>LOADING</div>
 
     <script src='/static/js/main.js' type="text/babel"></script>
 </body>

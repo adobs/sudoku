@@ -9,10 +9,7 @@ def generate_board():
     for row in xrange(board.rows):
         board_row = []
         for col in xrange(board.cols):
-            if board.problem[row, col] == " ":
-                board_row.append(0)
-            else:
-                board_row.append(board.problem[row, col])
+            board_row.append(board.problem[row, col])
         board_list.append(board_row)
 
     with open("boardpickle/board-file.pickle", 'wb') as f:
