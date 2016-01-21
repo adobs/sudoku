@@ -1,4 +1,5 @@
-// can only clear board once
+// can only clear board once, only sometimes it works
+// can't highlight the same number more than once
 
 $(function() {
 
@@ -16,36 +17,37 @@ $(function() {
               <Board/>, document.getElementById('sudoku')
             );
         },
-        highlight: function(clicked){
-            if (clicked){
-                $(".cell-btn:contains("+this.state.numberSelected+")").addClass('change-background');
-            }else{
-                $(".cell-btn").removeClass('change-background');                
-            }
+        highlight: function(){
+           $(".cell-btn:contains("+this.state.numberSelected+")").addClass('flash');
         },
+
         hint: function(row, col, value){
             var currentBoard = this.state.currentBoard;
             currentBoard[row][col] = value;
             this.setState({currentBoard: currentBoard});
             console.log("this row"+row+"this col"+col+"this val"+value);
-            $(".cell-btn:contains("+value+")").addClass("flash");
+            var cell = (row * 9 + col * 9)+1
+            console.log("cell is "+cell);
+            $("td:nth-child("+cell+")").children()[0].addClass('flash');
 
         },
+
         componentWillMount: function(){
             $.get("/problem-generator.json", function(data){
                 // check that the component is still mounted before updating its state
                 if (this.isMounted()){
                     this.setState({initialBoard: JSON.parse(data)});
                     this.setState({currentBoard: JSON.parse(data)});
+                    console.log("aaaaa"+JSON.parse(data))
 
                     }
                 }.bind(this));
 
-            $.get("/solved-board.json", function(answer){
+            $.get("/solved-board.json", function(data){
                 // check that the component is still mounted before updating its state
                 if (this.isMounted()){
-                    this.setState({finalBoard: JSON.parse(answer)});
-                    console.log('here');
+                    this.setState({finalBoard: JSON.parse(data)});
+                    console.log("line 49"+JSON.parse(data));
 
                     }
                 }.bind(this));
@@ -132,12 +134,8 @@ $(function() {
     });
     
     var Highlight = React.createClass({
-        getInitialState: function(){
-            return {clicked: true}
-        },
         highlight: function(){
-            this.props.highlight(this.state.clicked);
-            this.setState({clicked: this.state.clicked ? false : true});
+            this.props.highlight();
         },
         render: function(){
             return <button onClick={this.highlight}>Highlight</button>
