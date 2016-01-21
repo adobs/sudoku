@@ -23,6 +23,14 @@ $(function() {
                 $(".cell-btn").removeClass('change-background');                
             }
         },
+        hint: function(row, col, value){
+            var currentBoard = this.state.currentBoard;
+            currentBoard[row][col] = value;
+            this.setState({currentBoard: currentBoard});
+            console.log("this row"+row+"this col"+col+"this val"+value);
+            $(".cell-btn:contains("+value+")").addClass("flash");
+
+        },
         componentWillMount: function(){
             $.get("/problem-generator.json", function(data){
                 // check that the component is still mounted before updating its state
@@ -33,12 +41,11 @@ $(function() {
                     }
                 }.bind(this));
 
-            $.get("/solved-board.json", function(data){
+            $.get("/solved-board.json", function(answer){
                 // check that the component is still mounted before updating its state
                 if (this.isMounted()){
-                    this.setState({finalBoard: JSON.parse(data)});
+                    this.setState({finalBoard: JSON.parse(answer)});
                     console.log('here');
-                    console.log('data'+data);
 
                     }
                 }.bind(this));
@@ -83,17 +90,44 @@ $(function() {
                         <Check checkBoard={this.check}/>
                     </div>
                     <div>
-                        <Clear clearBoard={this.clearBoard}/>
+                        <Clear clearBoard={this.clearBoard} />
+                        <Hint hint={this.hint} currentBoard={this.state.currentBoard} finalBoard={this.state.finalBoard}/>
                     </div>
                     <table><tbody>{displayBoard}</tbody></table>
                     <div>
                         <Numbers numSelected={this.numberSelected}/>
                     </div>
-                        <Highlight highlight={this.highlight}/>
+                        <Highlight highlight={this.highlight} />
 
                 </div>
             );
 
+        }
+    });
+    
+    var Hint = React.createClass({
+        hint: function(){
+            var potentialHints = [];
+            console.log("currentboard"+this.props.currentBoard);
+            for (var row=0; row<9; row++){
+                for (var col=0; col<9; col++){
+                    if (this.props.currentBoard[row][col]===" "){
+                        potentialHints.push([row, col])
+                    }
+                }
+            }
+            var randomHintIndex = Math.floor(Math.random()* potentialHints.length);
+            var hintRow = parseInt(potentialHints[randomHintIndex][0]);
+            var hintCol = parseInt(potentialHints[randomHintIndex][1]);
+            console.log("lenght ="+this.props.finalBoard.length);
+            console.log("lenthi[0]"+this.props.finalBoard[0].length);
+            console.log("a final board"+this.props.finalBoard);
+            var value = this.props.finalBoard[hintRow][hintCol];
+            console.log("row 125 row "+hintRow+"col "+hintCol+"value "+value);
+            this.props.hint(hintRow, hintCol, value);
+        },
+        render: function(){
+            return <button onClick={this.hint}>Hint</button>;
         }
     });
     

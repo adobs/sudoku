@@ -21,10 +21,14 @@ def generate_board():
 def solved_board():
     log_file = open("boardpickle/board-file.pickle")
     board = pickle.load(log_file)
-    print "board is", board
+
     solved_board = []
     for row in xrange(board.rows):
+        board_row = []
         for col in xrange(board.cols):
-            solved_board.append(board.solution[row, col])
+            board_row = solved_board.append(board.solution[row, col])
+            print "row", row,"col",col,"solutions", board.solution[row, col]
+        solved_board.append(board_row)
+
     log_file.close()
     return solved_board
