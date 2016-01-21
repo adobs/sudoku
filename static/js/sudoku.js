@@ -1,8 +1,11 @@
 // can only clear board once, only sometimes it works
 // can't highlight the same number more than once
 // break out modules
+// make buttons dynamically size like tic tac toe
+// make scroll fit the game on entire screen
 
 $(function() {
+
 
     var Board = React.createClass({
         getInitialState: function(){ 
@@ -75,6 +78,9 @@ $(function() {
         },
 
         render: function(){
+            var buttonDimension = ($(window).height()-200)/15;
+            var style={height:buttonDimension, fontSize:buttonDimension}
+
             this.state.displayBoard = [];
             if (this.state.initialBoard !== null && this.state.currentBoard !== null){
                 for (var row=0; row<9; row++){
@@ -86,22 +92,17 @@ $(function() {
             }
             return (
                 <div>
-                    <div>
+                    <div id='controls' style={style}>
                         <New newGame={this.newGame}/>
-                    </div>
-                    <div>
                         <Check checkBoard={this.check}/>
-                    </div>
-                    <div>
                         <Clear clearBoard={this.clearBoard} />
                         <Hint hint={this.hint} currentBoard={this.state.currentBoard} finalBoard={this.state.finalBoard}/>
                     </div>
                     <table><tbody>{this.state.displayBoard}</tbody></table>
-                    <div>
+                    <div id='numbers' style={style}>
                         <Numbers numSelected={this.numberSelected}/>
-                    </div>
                         <Highlight highlight={this.highlight} />
-
+                    </div>
                 </div>
             );
 
@@ -122,7 +123,6 @@ $(function() {
             var hintRow = parseInt(potentialHints[randomHintIndex][0]);
             var hintCol = parseInt(potentialHints[randomHintIndex][1]);
             var value = this.props.finalBoard[hintRow][hintCol];
-            // Cell.flashCell();
             this.props.hint(hintRow, hintCol, value);
         },
         render: function(){
@@ -202,7 +202,7 @@ $(function() {
         },
 
         flashCell: function(row, col){
-            this.setState({flash: true})
+            this.setState({flash: true});
         },
 
         clickedCell: function(evt){
@@ -219,10 +219,6 @@ $(function() {
                 style.fontWeight ="bold";
             }else{
                 style.color="grey";
-            }
-            if (this.state.flash!==null && this.props.row === this.state.flash[0] && this.props.column ===this.state.flash[1]){
-                console.log('should have flashed');
-                style.addClass = "flash";
             }
             return <td><button style={style} className={this.state.flash ? "btn-board cell-btn flash" : "btn-board cell-btn"} onClick={this.clickedCell}>{this.props.value}</button></td>
         }
