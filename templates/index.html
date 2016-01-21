@@ -1,7 +1,47 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <title></title>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Grayscale - Start Bootstrap Theme</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.6/react.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.6/react-dom.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.2/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+
+    
+    <!-- Bootstrap -->
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <!-- Custom CSS -->
+    <link href="/static/css/sudoku.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Alegreya+Sans:400,700" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
     <style type="text/css">
         tr:nth-child(3n){
             border-bottom: 4px black solid;
@@ -17,24 +57,118 @@
             padding:0;
         }
         .change-background{
-            background: red;
+            background: #C4A58C;
         }
 
     </style>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.6/react.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.6/react-dom.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.2/marked.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
-
 
 </head>
-<body>
-    <h1>hello</h1>
-    <div id='sudoku'>LOADING</div>
+
+<body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
+                    <i class="fa fa-bars"></i>
+                </button>
+                <a class="navbar-brand page-scroll" href="#page-top">
+                    Welcome
+                </a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse navbar-right navbar-main-collapse">
+                <ul class="nav navbar-nav">
+                    <!-- Hidden li included to remove active class from about link when scrolled up past about section -->
+                    <li class="hidden">
+                        <a href="#page-top"></a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="#about">About</a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="#tips">Tips and Tricks</a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="#game">Play</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <!-- Intro Header -->
+    <header class="intro">
+        <div class="intro-body">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2">
+                        <h1 class="brand-heading">Sudoku</h1>
+                        <a href="#game" class='page-scroll'><button class='btn btn-lg'>Play</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div id='page-body'>
+        <!-- About Section -->
+        <section id="about" class="container content-section text-center">
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2 col-xs-12">
+                    <h2>About Sudoku</h2>
+                    <p>Each puzzle consists of a 9x9 grid containing given clues in various places. The objective is to fill all empty squares so that the numbers 1 to 9 appear exactly once in each row, column and 3x3 box.</p>
+                    <p>To play, click on one of the numbers (1-9) below the 9x9 grid.  Then click the cell in the board you would like the number to go</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tips Section -->
+        <section id="tips" class="content-section text-center">
+            <div class="download-section">
+                <div class="container">
+                    <div class="col-lg-8 col-lg-offset-2">
+                        <h2>Download Grayscale</h2>
+                        <p>You can download Grayscale for free on the preview page at Start Bootstrap.</p>
+                        <a href="http://startbootstrap.com/template-overviews/grayscale/" class="btn btn-default btn-lg">Visit Download Page</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="game" class="container content-section text-center">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2">
+                    <div id='sudoku'>LOADING</div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+
+    <!-- Footer -->
+    <footer>
+        <div class="container text-center">
+            <p>Built with love for Mom</p>
+        </div>
+    </footer>
+
+
+
+    <!-- Custom Theme JavaScript -->
+    <script src="/static/js/greyscale.js"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="/static/js/jquery.easing.min.js"></script>
 
     <script src='/static/js/sudoku.js' type="text/babel"></script>
-</body>
-</html> 
 
+</body>
+
+</html>

@@ -1,3 +1,5 @@
+// can only clear board once
+
 $(function() {
 
     var Board = React.createClass({
@@ -11,9 +13,15 @@ $(function() {
         newGame: function(){
             React.unmountComponentAtNode(sudoku);
             ReactDOM.render(
-              <Board/>,
-              document.getElementById('sudoku')
+              <Board/>, document.getElementById('sudoku')
             );
+        },
+        highlight: function(clicked){
+            if (clicked){
+                $(".cell-btn:contains("+this.state.numberSelected+")").addClass('change-background');
+            }else{
+                $(".cell-btn").removeClass('change-background');                
+            }
         },
         componentWillMount: function(){
             $.get("/problem-generator.json", function(data){
@@ -81,6 +89,7 @@ $(function() {
                     <div>
                         <Numbers numSelected={this.numberSelected}/>
                     </div>
+                        <Highlight highlight={this.highlight}/>
 
                 </div>
             );
@@ -88,6 +97,20 @@ $(function() {
         }
     });
     
+    var Highlight = React.createClass({
+        getInitialState: function(){
+            return {clicked: true}
+        },
+        highlight: function(){
+            this.props.highlight(this.state.clicked);
+            this.setState({clicked: this.state.clicked ? false : true});
+        },
+        render: function(){
+            return <button onClick={this.highlight}>Highlight</button>
+        }
+
+    })
+
     var New = React.createClass({
         newGame: function(){
             this.props.newGame();
@@ -157,14 +180,14 @@ $(function() {
         },
 
         render: function(){
-            var cellDimension = ($(window).height()-100)/10;
+            var cellDimension = ($(window).height()-200)/10;
             var style={width:cellDimension, height:cellDimension, fontSize:cellDimension, lineHeight:".75em" };
             if (this.state.permanent === true){
                 style.fontWeight ="bold";
             }else{
                 style.color="grey";
             }
-            return <td><button style={style} onClick={this.clickedCell}>{this.props.value}</button></td>
+            return <td><button style={style} className="btn-board cell-btn" onClick={this.clickedCell}>{this.props.value}</button></td>
         }
 
 
@@ -178,20 +201,20 @@ $(function() {
         },
 
         render: function(){
-            var cellDimension = ($(window).height()-100)/11;                  ;
+            var cellDimension = ($(window).height()-200)/11;                  ;
             var style={width:cellDimension, height:cellDimension, fontSize:cellDimension, lineHeight:".75em", marginTop:20};
             return (
                 <div>
-                    <button className="numberButton" style={style} onClick={this.changeNumber}> </button>
-                    <button className="numberButton" style={style} onClick={this.changeNumber}>1</button>
-                    <button className="numberButton" style={style} onClick={this.changeNumber}>2</button>
-                    <button className="numberButton" style={style} onClick={this.changeNumber}>3</button>
-                    <button className="numberButton" style={style} onClick={this.changeNumber}>4</button>
-                    <button className="numberButton" style={style} onClick={this.changeNumber}>5</button>
-                    <button className="numberButton" style={style} onClick={this.changeNumber}>6</button>
-                    <button className="numberButton" style={style} onClick={this.changeNumber}>7</button>
-                    <button className="numberButton" style={style} onClick={this.changeNumber}>8</button>
-                    <button className="numberButton" style={style} onClick={this.changeNumber}>9</button>
+                    <button className="numberButton btn-board" style={style} onClick={this.changeNumber}> </button>
+                    <button className="numberButton btn-board" style={style} onClick={this.changeNumber}>1</button>
+                    <button className="numberButton btn-board" style={style} onClick={this.changeNumber}>2</button>
+                    <button className="numberButton btn-board" style={style} onClick={this.changeNumber}>3</button>
+                    <button className="numberButton btn-board" style={style} onClick={this.changeNumber}>4</button>
+                    <button className="numberButton btn-board" style={style} onClick={this.changeNumber}>5</button>
+                    <button className="numberButton btn-board" style={style} onClick={this.changeNumber}>6</button>
+                    <button className="numberButton btn-board" style={style} onClick={this.changeNumber}>7</button>
+                    <button className="numberButton btn-board" style={style} onClick={this.changeNumber}>8</button>
+                    <button className="numberButton btn-board" style={style} onClick={this.changeNumber}>9</button>
                 </div>
             );
 
