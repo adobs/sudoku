@@ -1,5 +1,6 @@
 // can only clear board once, only sometimes it works
 // can't highlight the same number more than once
+// break out modules
 
 $(function() {
 
@@ -25,20 +26,16 @@ $(function() {
             var currentBoard = this.state.currentBoard;
             currentBoard[row][col] = value;
             this.setState({currentBoard: currentBoard});
-            console.log("this row"+row+"this col"+col+"this val"+value);
-            var cell = (row * 9 + col * 9)+1
-            console.log("cell is "+cell);
-            $("td:nth-child("+cell+")").children()[0].addClass('flash');
+            var hintRow = this.state.displayBoard[row];
+            this.refs['row'+row].flashRow(row, col);
 
         },
-
         componentWillMount: function(){
             $.get("/problem-generator.json", function(data){
                 // check that the component is still mounted before updating its state
                 if (this.isMounted()){
                     this.setState({initialBoard: JSON.parse(data)});
                     this.setState({currentBoard: JSON.parse(data)});
-                    console.log("aaaaa"+JSON.parse(data))
 
                     }
                 }.bind(this));
@@ -47,10 +44,12 @@ $(function() {
                 // check that the component is still mounted before updating its state
                 if (this.isMounted()){
                     this.setState({finalBoard: JSON.parse(data)});
-                    console.log("line 49"+JSON.parse(data));
 
                     }
                 }.bind(this));
+
+            var displayBoard = [];
+            this.setState({displayBoard: displayBoard});
         },
 
         update: function(row, column, value){
@@ -76,13 +75,15 @@ $(function() {
         },
 
         render: function(){
-            var displayBoard = [];
+            this.state.displayBoard = [];
             if (this.state.initialBoard !== null && this.state.currentBoard !== null){
                 for (var row=0; row<9; row++){
-                    displayBoard.push(<Row update={this.update} row={row} innerValue={this.state.initialBoard[row]} value={this.state.currentBoard[row]} numSelected={this.state.numberSelected}/>);
+                    var stringRow = "row"+row;
+                    var localVar = (<Row ref={stringRow} update={this.update} row={row} innerValue={this.state.initialBoard[row]} value={this.state.currentBoard[row]} numSelected={this.state.numberSelected}/>);
+                    this.state.displayBoard.push(localVar);
                 }
+
             }
-            console.log("here"+this.state.finalBoard);
             return (
                 <div>
                     <div>
@@ -95,7 +96,7 @@ $(function() {
                         <Clear clearBoard={this.clearBoard} />
                         <Hint hint={this.hint} currentBoard={this.state.currentBoard} finalBoard={this.state.finalBoard}/>
                     </div>
-                    <table><tbody>{displayBoard}</tbody></table>
+                    <table><tbody>{this.state.displayBoard}</tbody></table>
                     <div>
                         <Numbers numSelected={this.numberSelected}/>
                     </div>
@@ -110,7 +111,6 @@ $(function() {
     var Hint = React.createClass({
         hint: function(){
             var potentialHints = [];
-            console.log("currentboard"+this.props.currentBoard);
             for (var row=0; row<9; row++){
                 for (var col=0; col<9; col++){
                     if (this.props.currentBoard[row][col]===" "){
@@ -121,11 +121,8 @@ $(function() {
             var randomHintIndex = Math.floor(Math.random()* potentialHints.length);
             var hintRow = parseInt(potentialHints[randomHintIndex][0]);
             var hintCol = parseInt(potentialHints[randomHintIndex][1]);
-            console.log("lenght ="+this.props.finalBoard.length);
-            console.log("lenthi[0]"+this.props.finalBoard[0].length);
-            console.log("a final board"+this.props.finalBoard);
             var value = this.props.finalBoard[hintRow][hintCol];
-            console.log("row 125 row "+hintRow+"col "+hintCol+"value "+value);
+            // Cell.flashCell();
             this.props.hint(hintRow, hintCol, value);
         },
         render: function(){
@@ -162,11 +159,15 @@ $(function() {
     });
     
     var Row = React.createClass({
+        flashRow: function(rowFlash, colFlash){
+            this.refs['cell'+colFlash].flashCell(rowFlash, colFlash);
+        },
 
         render: function(){
             var displayRow= [];
             for (var col=0; col<9; col++){
-                displayRow.push(<Cell update={this.props.update} row={this.props.row} column={col} innerValue={this.props.innerValue[col]} value={this.props.value[col]} numSelected={this.props.numSelected}/>);
+                var stringCol = "cell"+col;
+                displayRow.push(<Cell ref={stringCol} update={this.props.update} row={this.props.row} column={col} innerValue={this.props.innerValue[col]} value={this.props.value[col]} numSelected={this.props.numSelected}/>);
             }
             return (
                 <tr>{displayRow}</tr>
@@ -196,19 +197,19 @@ $(function() {
 
     var Cell = React.createClass({
 
+        getInitialState: function(){
+            return {permanent: (this.props.value == 0 ? false : true), flash: false};
+        },
+
+        flashCell: function(row, col){
+            this.setState({flash: true})
+        },
+
         clickedCell: function(evt){
-            console.log("clicked");
-            console.log("this state perm"+this.state.permanent);
-            console.log("this porps valu"+this.props.value);
             if (this.props.numSelected && this.state.permanent === false){
-                console.log('change')
                 evt.target.innerHTML = this.props.numSelected;
                 this.props.update(this.props.row, this.props.column, this.props.numSelected);
             }
-        },
-
-        getInitialState: function(){
-            return {permanent: (this.props.value == 0 ? false : true)}
         },
 
         render: function(){
@@ -219,7 +220,11 @@ $(function() {
             }else{
                 style.color="grey";
             }
-            return <td><button style={style} className="btn-board cell-btn" onClick={this.clickedCell}>{this.props.value}</button></td>
+            if (this.state.flash!==null && this.props.row === this.state.flash[0] && this.props.column ===this.state.flash[1]){
+                console.log('should have flashed');
+                style.addClass = "flash";
+            }
+            return <td><button style={style} className={this.state.flash ? "btn-board cell-btn flash" : "btn-board cell-btn"} onClick={this.clickedCell}>{this.props.value}</button></td>
         }
 
 
