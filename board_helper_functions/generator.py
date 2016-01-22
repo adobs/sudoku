@@ -27,7 +27,6 @@ def solved_board():
         board_row = []
         for col in xrange(board.cols):
             board_row.append(board.solution[row, col])
-            print "row", row,"col",col,"solutions", board.solution[row, col]
         solved_board.append(board_row)
 
     log_file.close()

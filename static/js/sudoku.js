@@ -2,11 +2,12 @@
 // can't highlight the same number more than once
 // break out modules
 // make buttons dynamically size like tic tac toe
-// make scroll fit the game on entire screen
+//check if more of my classes should be more oop
+// add timer
 
 $(function() {
 
-
+    $(".control-button").height(($("#sudoku").width())/14);
     var Board = React.createClass({
         getInitialState: function(){ 
             return {initialBoard: null, numberSelected: null, currentBoard: null, finalBoard: null}
@@ -15,14 +16,12 @@ $(function() {
         numberSelected: function(number){
             this.setState({numberSelected: number});
         },
+
         newGame: function(){
             React.unmountComponentAtNode(sudoku);
             ReactDOM.render(
               <Board/>, document.getElementById('sudoku')
             );
-        },
-        highlight: function(){
-           $(".cell-btn:contains("+this.state.numberSelected+")").addClass('flash');
         },
 
         hint: function(row, col, value){
@@ -78,8 +77,8 @@ $(function() {
         },
 
         render: function(){
-            var buttonDimension = ($(window).height()-200)/15;
-            var style={height:buttonDimension, fontSize:buttonDimension}
+            var buttonDimension = ($("#sudoku").width())/22; 
+            var style={height:buttonDimension, fontSize:buttonDimension};
 
             this.state.displayBoard = [];
             if (this.state.initialBoard !== null && this.state.currentBoard !== null){
@@ -98,11 +97,15 @@ $(function() {
                         <Clear clearBoard={this.clearBoard} />
                         <Hint hint={this.hint} currentBoard={this.state.currentBoard} finalBoard={this.state.finalBoard}/>
                     </div>
-                    <table><tbody>{this.state.displayBoard}</tbody></table>
-                    <div id='numbers' style={style}>
+                    <hr></hr>
+                    <p id='instructions'>
+                    Click a number to play below.<br/>Then, click on the board where you would like it to go.
+                    </p>
+                    <div id='numbers'>
                         <Numbers numSelected={this.numberSelected}/>
-                        <Highlight highlight={this.highlight} />
+                        <Highlight numSelected={this.state.numberSelected} />
                     </div>
+                    <table><tbody>{this.state.displayBoard}</tbody></table>
                 </div>
             );
 
@@ -126,16 +129,23 @@ $(function() {
             this.props.hint(hintRow, hintCol, value);
         },
         render: function(){
-            return <button onClick={this.hint}>Hint</button>;
+            return <button className="control-button" onClick={this.hint}>Hint</button>;
         }
     });
     
     var Highlight = React.createClass({
         highlight: function(){
-            this.props.highlight();
+            // $$("body").find($(".flash")).removeClass('flash');
+            $(".cell-btn:contains("+this.props.numSelected+")").addClass('flash');
+            var num = this.props.numberSelected
+            setTimeout(function(){$(".cell-btn").removeClass("flash");}, 300);
         },
+
+
         render: function(){
-            return <button onClick={this.highlight}>Highlight</button>
+            var cellDimension = ($("#sudoku").width())/14;
+            var style = {height: cellDimension, fontSize:cellDimension-13, lineHeight:".75em"}
+            return <button id='highlight' style={style} onClick={this.highlight}>Highlight</button>
         }
 
     })
@@ -145,7 +155,7 @@ $(function() {
             this.props.newGame();
         },
         render: function(){
-            return <button onClick={this.newGame}>New Game</button>
+            return <button className="control-button" onClick={this.newGame}>New Game</button>
         }
     });
 
@@ -154,7 +164,7 @@ $(function() {
             this.props.clearBoard();
         },
         render: function(){
-            return <button onClick={this.clearBoard}>Start Over</button>
+            return <button className="control-button" onClick={this.clearBoard}>Start Over</button>
         }
     });
     
@@ -182,15 +192,17 @@ $(function() {
         check: function(){
             var won = this.props.checkBoard()
             if (won){
-                alert("YOU WON");
+                console.log("YOU WON");
+                $('#myModalWinning').modal('show');
             }else{
-                alert('not quite');
+                $('#myModalLosing').modal('show');
+
             }
 
         },
         
         render: function(){
-            return <button onClick={this.check}>Check Answer</button>;
+            return <button className="control-button" onClick={this.check}>Check Answer</button>;
         }
     });
 
@@ -198,7 +210,7 @@ $(function() {
     var Cell = React.createClass({
 
         getInitialState: function(){
-            return {permanent: (this.props.value == 0 ? false : true), flash: false};
+            return {permanent: (isNaN(parseInt(this.props.value)) ? false : true), flash: false};
         },
 
         flashCell: function(row, col){
@@ -207,20 +219,19 @@ $(function() {
 
         clickedCell: function(evt){
             if (this.props.numSelected && this.state.permanent === false){
-                evt.target.innerHTML = this.props.numSelected;
                 this.props.update(this.props.row, this.props.column, this.props.numSelected);
             }
         },
 
         render: function(){
-            var cellDimension = ($(window).height()-200)/10;
+            var cellDimension = $("#sudoku").width()/13;
             var style={width:cellDimension, height:cellDimension, fontSize:cellDimension, lineHeight:".75em" };
             if (this.state.permanent === true){
                 style.fontWeight ="bold";
             }else{
                 style.color="grey";
             }
-            return <td><button style={style} className={this.state.flash ? "btn-board cell-btn flash" : "btn-board cell-btn"} onClick={this.clickedCell}>{this.props.value}</button></td>
+            return <td><button style={style} className={this.state.flash ? "btn-board cell-btn flash" : "btn-board cell-btn"} onClick={this.clickedCell}>{isNaN(parseInt(this.props.value)) ? String.fromCharCode(20) : this.props.value}</button></td>
         }
 
 
@@ -234,11 +245,11 @@ $(function() {
         },
 
         render: function(){
-            var cellDimension = ($(window).height()-200)/11;                  ;
+            var cellDimension = ($("#sudoku").width())/14;                  ;
             var style={width:cellDimension, height:cellDimension, fontSize:cellDimension, lineHeight:".75em", marginTop:20};
             return (
                 <div>
-                    <button className="numberButton btn-board" style={style} onClick={this.changeNumber}> </button>
+                    <button className="numberButton btn-board" style={style} onClick={this.changeNumber}>{String.fromCharCode(20)}</button>
                     <button className="numberButton btn-board" style={style} onClick={this.changeNumber}>1</button>
                     <button className="numberButton btn-board" style={style} onClick={this.changeNumber}>2</button>
                     <button className="numberButton btn-board" style={style} onClick={this.changeNumber}>3</button>
