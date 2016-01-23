@@ -28,6 +28,7 @@ p {
     margin: 0;
     font-size: 18px;
     line-height: 1.5;
+    padding-bottom: 0;
 }
 
 @media(min-width:768px) {
@@ -35,6 +36,7 @@ p {
         margin: 0;
         font-size: 20px;
         line-height: 1.6;
+        padding-bottom: 0;
     }
 }
 
@@ -294,6 +296,21 @@ table{
     margin: 0 auto;
 }
 
+#sudoku{
+    border: 3px solid black;
+    border-radius: 4px;
+    padding-top: 60px;
+    padding-right: 20px;
+    padding-left: 20px;
+    margin-bottom: 40px;
+    background-color: #324A45;
+}
+
+#table-div{
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
 .btn-default {
     border: 1px solid #324A45;;
     color: #324A45;
@@ -316,14 +333,41 @@ ul.banner-social-buttons {
     margin-bottom: 40px
     margin-top: 0;
 }
+img{
+    margin: 0 auto;
+}
 
-
-#numbers, #controls{
+#controls{
     display: flex;
     flex-wrap: no-wrap;
     justify-content: center;
     align-items: center;
     align-content: center;
+}
+
+#numbers{
+    display: flex;
+    flex-wrap: no-wrap;
+    justify-content: center;
+    align-items: flex-end;
+    align-content: center;
+}
+
+tr:nth-child(3n){
+    border-bottom: 4px black solid;
+}
+td:nth-child(3n){
+    border-right: 4px black solid;
+}
+table { 
+    border-collapse: collapse; 
+    border: 4px black solid;
+}
+td{
+    padding:0;
+}
+.change-background{
+    background: #C4A58C;
 }
 
 @media(max-width:1199px) {
@@ -379,13 +423,13 @@ body {
 
 .flash {
   -moz-animation: flash 1s ease-out;
-  -moz-animation-iteration-count: 10;
+  -moz-animation-iteration-count: 1f;
 
   -webkit-animation: flash 1s ease-out;
-  -webkit-animation-iteration-count: 10;
+  -webkit-animation-iteration-count: 1;
 
   -ms-animation: flash 1s ease-out;
-  -ms-animation-iteration-count: 10;
+  -ms-animation-iteration-count: 1;
 }
 
 @-webkit-keyframes flash {

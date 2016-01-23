@@ -42,26 +42,6 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-    <style type="text/css">
-        tr:nth-child(3n){
-            border-bottom: 4px black solid;
-        }
-        td:nth-child(3n){
-            border-right: 4px black solid;
-        }
-        table { 
-            border-collapse: collapse; 
-            border: 4px black solid;
-        }
-        td{
-            padding:0;
-        }
-        .change-background{
-            background: #C4A58C;
-        }
-
-    </style>
-
 </head>
 
 <body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
@@ -120,7 +100,10 @@
                 <div class="col-md-8 col-md-offset-2 col-xs-12">
                     <h2>About Sudoku</h2>
                     <p>Each puzzle consists of a 9x9 grid containing given clues in various places. The objective is to fill all empty squares so that the numbers 1 to 9 appear exactly once in each row, column and 3x3 box.</p>
+                    <br>
                     <p>To play, click on one of the numbers (1-9) below the 9x9 grid.  Then click the cell in the board you would like the number to go.</p>
+                    <br>
+                    <p>If you need a little help, click the 'Hint' button!</p>
                 </div>
             </div>
         </section>
@@ -148,6 +131,7 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-body">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <img class='img-responsive' src='/static/img/win.jpg'>
           </div> <!-- close modal body -->
         </div> <!-- close modal content -->

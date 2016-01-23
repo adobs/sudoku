@@ -1,13 +1,11 @@
 // can only clear board once, only sometimes it works
-// can't highlight the same number more than once
 // break out modules
 // make buttons dynamically size like tic tac toe
 //check if more of my classes should be more oop
-// add timer
 
 $(function() {
-
-    $(".control-button").height(($("#sudoku").width())/14);
+    
+    
     var Board = React.createClass({
         getInitialState: function(){ 
             return {initialBoard: null, numberSelected: null, currentBoard: null, finalBoard: null}
@@ -61,7 +59,14 @@ $(function() {
         },
 
         clearBoard: function(){
-            this.setState({currentBoard: this.state.initialBoard});
+            function copy(array) {
+              return array.map(function(arr) {
+                return arr.slice();
+              });
+            }
+
+            var newCurrentBoard = copy(this.state.initialBoard);
+            this.setState({currentBoard: newCurrentBoard});
 
         },
 
@@ -105,7 +110,9 @@ $(function() {
                         <Numbers numSelected={this.numberSelected}/>
                         <Highlight numSelected={this.state.numberSelected} />
                     </div>
-                    <table><tbody>{this.state.displayBoard}</tbody></table>
+                    <div id='table-div'>
+                        <table><tbody>{this.state.displayBoard}</tbody></table>
+                    </div>
                 </div>
             );
 
@@ -138,7 +145,7 @@ $(function() {
             // $$("body").find($(".flash")).removeClass('flash');
             $(".cell-btn:contains("+this.props.numSelected+")").addClass('flash');
             var num = this.props.numberSelected
-            setTimeout(function(){$(".cell-btn").removeClass("flash");}, 300);
+            setTimeout(function(){$(".cell-btn").removeClass("flash");}, 1000);
         },
 
 
