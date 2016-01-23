@@ -249,7 +249,7 @@ $(function() {
 
         render: function(){
             var cellDimension = ($("#sudoku").width())/14;                  ;
-            var style={width:cellDimension, height:cellDimension, fontSize:cellDimension, lineHeight:".75em", marginTop:20};
+            var style={width:cellDimension, padding:0, height:cellDimension, fontSize:cellDimension, lineHeight:".75em", marginTop:20};
             return (
                 <div>
                     <button className="numberButton btn-board btn btn-default" style={style} onClick={this.changeNumber}>{String.fromCharCode(20)}</button>
