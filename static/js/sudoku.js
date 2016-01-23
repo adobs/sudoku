@@ -132,7 +132,7 @@ $(function() {
             this.props.hint(hintRow, hintCol, value);
         },
         render: function(){
-            return <button className="control-button" onClick={this.hint}>Hint</button>;
+            return <button className="control-button btn btn-default" onClick={this.hint}>Hint</button>;
         }
     });
     
@@ -147,7 +147,7 @@ $(function() {
 
         render: function(){
             var cellDimension = ($("#sudoku").width())/14;
-            var style = {height: cellDimension, fontSize:cellDimension-13, lineHeight:".75em"}
+            var style = {height: cellDimension, fontSize:cellDimension-13, className:"btn-default btn", lineHeight:".75em"}
             return <button id='highlight' style={style} onClick={this.highlight}>Highlight</button>
         }
 
@@ -158,7 +158,7 @@ $(function() {
             this.props.newGame();
         },
         render: function(){
-            return <button className="control-button" onClick={this.newGame}>New Game</button>
+            return <button className="control-button btn btn-default" onClick={this.newGame}>New Game</button>
         }
     });
 
@@ -167,7 +167,7 @@ $(function() {
             this.props.clearBoard();
         },
         render: function(){
-            return <button className="control-button" onClick={this.clearBoard}>Start Over</button>
+            return <button className="control-button btn btn-default" onClick={this.clearBoard}>Start Over</button>
         }
     });
     
@@ -203,9 +203,9 @@ $(function() {
             }
 
         },
-        
+
         render: function(){
-            return <button className="control-button" onClick={this.check}>Check Answer</button>;
+            return <button className="control-button btn-default btn" onClick={this.check}>Check Answer</button>;
         }
     });
 
@@ -228,13 +228,13 @@ $(function() {
 
         render: function(){
             var cellDimension = $("#sudoku").width()/13;
-            var style={width:cellDimension, height:cellDimension, fontSize:cellDimension, lineHeight:".75em" };
+            var style={width:cellDimension, height:cellDimension, fontSize:cellDimension, padding:0, lineHeight:".75em" };
             if (this.state.permanent === true){
                 style.fontWeight ="bold";
             }else{
                 style.color="grey";
             }
-            return <td><button style={style} className={this.state.flash ? "btn-board cell-btn flash" : "btn-board cell-btn"} onClick={this.clickedCell}>{isNaN(parseInt(this.props.value)) ? String.fromCharCode(20) : this.props.value}</button></td>
+            return <td><button style={style} className={this.state.flash ? "btn-board cell-btn btn-default btn flash" : "btn-board btn btn-default cell-btn"} onClick={this.clickedCell}>{isNaN(parseInt(this.props.value)) ? String.fromCharCode(20) : this.props.value}</button></td>
         }
 
 
