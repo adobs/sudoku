@@ -252,16 +252,16 @@ $(function() {
             var style={width:cellDimension, height:cellDimension, fontSize:cellDimension, lineHeight:".75em", marginTop:20};
             return (
                 <div>
-                    <button className="numberButton btn-board" style={style} onClick={this.changeNumber}>{String.fromCharCode(20)}</button>
-                    <button className="numberButton btn-board" style={style} onClick={this.changeNumber}>1</button>
-                    <button className="numberButton btn-board" style={style} onClick={this.changeNumber}>2</button>
-                    <button className="numberButton btn-board" style={style} onClick={this.changeNumber}>3</button>
-                    <button className="numberButton btn-board" style={style} onClick={this.changeNumber}>4</button>
-                    <button className="numberButton btn-board" style={style} onClick={this.changeNumber}>5</button>
-                    <button className="numberButton btn-board" style={style} onClick={this.changeNumber}>6</button>
-                    <button className="numberButton btn-board" style={style} onClick={this.changeNumber}>7</button>
-                    <button className="numberButton btn-board" style={style} onClick={this.changeNumber}>8</button>
-                    <button className="numberButton btn-board" style={style} onClick={this.changeNumber}>9</button>
+                    <button className="numberButton btn-board btn btn-default" style={style} onClick={this.changeNumber}>{String.fromCharCode(20)}</button>
+                    <button className="numberButton btn-board btn btn-default" style={style} onClick={this.changeNumber}>1</button>
+                    <button className="numberButton btn-board btn btn-default" style={style} onClick={this.changeNumber}>2</button>
+                    <button className="numberButton btn-board btn btn-default" style={style} onClick={this.changeNumber}>3</button>
+                    <button className="numberButton btn-board btn btn-default" style={style} onClick={this.changeNumber}>4</button>
+                    <button className="numberButton btn-board btn btn-default" style={style} onClick={this.changeNumber}>5</button>
+                    <button className="numberButton btn-board btn btn-default" style={style} onClick={this.changeNumber}>6</button>
+                    <button className="numberButton btn-board btn btn-default" style={style} onClick={this.changeNumber}>7</button>
+                    <button className="numberButton btn-board btn btn-default" style={style} onClick={this.changeNumber}>8</button>
+                    <button className="numberButton btn-board btn btn-default" style={style} onClick={this.changeNumber}>9</button>
                 </div>
             );
 
