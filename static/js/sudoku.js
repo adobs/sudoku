@@ -1,11 +1,7 @@
-// can only clear board once, only sometimes it works
-// break out modules
-// make buttons dynamically size like tic tac toe
-//check if more of my classes should be more oop
 
 $(function() {
-    
-    
+
+
     var Board = React.createClass({
         getInitialState: function(){ 
             return {initialBoard: null, numberSelected: null, currentBoard: null, finalBoard: null}
