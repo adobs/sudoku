@@ -285,6 +285,7 @@ a:focus {
 .btn-board, button{
     color: #324A45;
     font-family: 'Open Sans',"Helvetica Neue",Helvetica,Arial,sans-serif;
+    -webkit-appearance: none;
 
 }
 
