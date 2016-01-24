@@ -1,8 +1,6 @@
 // make buttons text fit in buttons on mobile.
-// make p smaller   
 // make responsive when resizing window 
 // download bootstrap and react
-// change order of clicks so that you click on a cell and it highlights then you click on a number and it changes
 // add the three buttons in the nav bar
 $(function() {
 
@@ -90,7 +88,7 @@ $(function() {
         },
 
         render: function(){
-            var buttonDimension = ($("#sudoku").width())/5; 
+            var buttonDimension = ($("#sudoku").width()); 
             var style={width:buttonDimension};
 
             this.state.displayBoard = [];
@@ -111,15 +109,14 @@ $(function() {
                         <Hint hint={this.hint} currentBoard={this.state.currentBoard} finalBoard={this.state.finalBoard}/>
                     </div>
                     <hr></hr>
+                    <div id='table-div'>
+                        <table><tbody>{this.state.displayBoard}</tbody></table>
+                    </div>
                     <p id='instructions'>
-                    Click a number to play below.<br/>Then, click on the board where you would like it to go.
+                    Click a cell on the board.<br/>Then, click a number below to add it to the cell.
                     </p>
                     <div id='numbers'>
                         <Numbers numSelected={this.numberSelected} update={this.update}/>
-                        <Highlight numSelected={this.state.numberSelected} />
-                    </div>
-                    <div id='table-div'>
-                        <table><tbody>{this.state.displayBoard}</tbody></table>
                     </div>
                 </div>
             );
@@ -144,26 +141,10 @@ $(function() {
             this.props.hint(hintRow, hintCol, value);
         },
         render: function(){
-            return <button className="control-button btn btn-default" onClick={this.hint}>Hint</button>;
+            return <button className="control-button btn btn-default" onClick={this.hint} data-toggle="tooltip" data-placement="bottom" title="Click me, then watch the board to see your hint appear!">Hint</button>;
         }
     });
     
-    var Highlight = React.createClass({
-        highlight: function(){
-            $(".cell-btn:contains("+this.props.numSelected+")").addClass('flash');
-            var num = this.props.numberSelected
-            setTimeout(function(){$(".cell-btn").removeClass("flash");}, 1000);
-        },
-
-
-        render: function(){
-            var cellDimension = ($("#sudoku").width())/14;
-            var style = {height: cellDimension, fontSize:cellDimension-13, className:"btn-default btn", lineHeight:".75em"}
-            return <button id='highlight' style={style} onClick={this.highlight}>Highlight</button>
-        }
-
-    })
-
     var New = React.createClass({
         newGame: function(){
             this.props.newGame();
@@ -206,7 +187,6 @@ $(function() {
         check: function(){
             var won = this.props.checkBoard()
             if (won){
-                console.log("YOU WON");
                 $('#myModalWinning').modal('show');
             }else{
                 $('#myModalLosing').modal('show');
@@ -267,18 +247,10 @@ $(function() {
     });
 
     var Numbers = React.createClass({
-        getInitialState: function(){
-            return {clicked: null, clickedNumber: null}
-        },
 
         changeNumber: function(evt){
-            this.setState({clicked: true});
-            this.setState({clickedNumber: evt.target.innerHTML});
-            $(".numberButton").removeClass("change-background2");
             this.props.numSelected(evt.target.innerHTML);
             this.props.update(evt.target.innerHTML);
-            console.log("the number clickd on "+evt.target.innerHTML);
-            // $(evt.target).addClass("change-background2");
         },
 
         render: function(){
@@ -289,9 +261,7 @@ $(function() {
                 "btn-board" : true,
                 "btn" : true,
                 "btn-default" : true
-                // "change-background2": this.state.clicked
             });
-            console.log("this state of the nubmer is "+this.state.clicked)
 
             return (
                 <div>
