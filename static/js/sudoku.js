@@ -58,9 +58,12 @@ $(function() {
         },
 
         update: function(value){
-            var current = this.state.currentBoard;
-            current[this.state.cellSelected[0]][this.state.cellSelected[1]] = value;
-            this.setState({currentBoard: current});
+            if (this.state.cellSelected){
+                var current = this.state.currentBoard;
+                current[this.state.cellSelected[0]][this.state.cellSelected[1]] = value;
+                console.log("row "+this.state.cellSelected[0]+" col "+this.state.cellSelected[1]+" value "+value )
+                this.setState({currentBoard: current});
+            }
         },
 
         clearBoard: function(){
@@ -264,34 +267,44 @@ $(function() {
     });
 
     var Numbers = React.createClass({
+        getInitialState: function(){
+            return {clicked: null, clickedNumber: null}
+        },
+
         changeNumber: function(evt){
+            this.setState({clicked: true});
+            this.setState({clickedNumber: evt.target.innerHTML});
+            $(".numberButton").removeClass("change-background2");
             this.props.numSelected(evt.target.innerHTML);
             this.props.update(evt.target.innerHTML);
-            // $(".numberButton").removeClass("change-background");
-            // $(evt.target).addClass("change-background");
+            console.log("the number clickd on "+evt.target.innerHTML);
+            // $(evt.target).addClass("change-background2");
         },
 
         render: function(){
-            var cellDimension = ($("#sudoku").width())/14;                  ;
+            var cellDimension = ($("#sudoku").width())/14;                  
             var style={width:cellDimension, padding:0, height:cellDimension, fontSize:cellDimension, lineHeight:".75em", marginTop:20};
             var btnClass = classNames({
                 "numberButton": true,
                 "btn-board" : true,
                 "btn" : true,
                 "btn-default" : true
+                // "change-background2": this.state.clicked
             });
+            console.log("this state of the nubmer is "+this.state.clicked)
+
             return (
                 <div>
                     <button className={btnClass} style={style} onClick={this.changeNumber}>{String.fromCharCode(20)}</button>
-                    <button className="numberButton btn-board btn btn-default" style={style} onClick={this.changeNumber}>1</button>
-                    <button className="numberButton btn-board btn btn-default" style={style} onClick={this.changeNumber}>2</button>
-                    <button className="numberButton btn-board btn btn-default" style={style} onClick={this.changeNumber}>3</button>
-                    <button className="numberButton btn-board btn btn-default" style={style} onClick={this.changeNumber}>4</button>
-                    <button className="numberButton btn-board btn btn-default" style={style} onClick={this.changeNumber}>5</button>
-                    <button className="numberButton btn-board btn btn-default" style={style} onClick={this.changeNumber}>6</button>
-                    <button className="numberButton btn-board btn btn-default" style={style} onClick={this.changeNumber}>7</button>
-                    <button className="numberButton btn-board btn btn-default" style={style} onClick={this.changeNumber}>8</button>
-                    <button className="numberButton btn-board btn btn-default" style={style} onClick={this.changeNumber}>9</button>
+                    <button className={btnClass} style={style} onClick={this.changeNumber}>1</button>
+                    <button className={btnClass} style={style} onClick={this.changeNumber}>2</button>
+                    <button className={btnClass} style={style} onClick={this.changeNumber}>3</button>
+                    <button className={btnClass} style={style} onClick={this.changeNumber}>4</button>
+                    <button className={btnClass} style={style} onClick={this.changeNumber}>5</button>
+                    <button className={btnClass} style={style} onClick={this.changeNumber}>6</button>
+                    <button className={btnClass} style={style} onClick={this.changeNumber}>7</button>
+                    <button className={btnClass} style={style} onClick={this.changeNumber}>8</button>
+                    <button className={btnClass} style={style} onClick={this.changeNumber}>9</button>
                 </div>
             );
 
