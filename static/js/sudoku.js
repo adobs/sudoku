@@ -1,14 +1,23 @@
-
+// make buttons text fit in buttons on mobile.
+// make p smaller   
+// make responsive when resizing window 
+// download bootstrap and react
+// change order of clicks so that you click on a cell and it highlights then you click on a number and it changes
+// add the three buttons in the nav bar
 $(function() {
 
 
     var Board = React.createClass({
         getInitialState: function(){ 
-            return {initialBoard: null, numberSelected: null, currentBoard: null, finalBoard: null}
+            return {initialBoard: null, cellSelected: null, numSelected: null, currentBoard: null, finalBoard: null}
         },
 
-        numberSelected: function(number){
-            this.setState({numberSelected: number});
+        cellSelected: function(row, column){
+            this.setState({cellSelected: [row, column]});
+        },
+
+        numberSelected: function(value){
+            this.setState({numSelected: value});
         },
 
         newGame: function(){
@@ -48,9 +57,9 @@ $(function() {
             this.setState({displayBoard: displayBoard});
         },
 
-        update: function(row, column, value){
+        update: function(value){
             var current = this.state.currentBoard;
-            current[row][column] = value;
+            current[this.state.cellSelected[0]][this.state.cellSelected[1]] = value;
             this.setState({currentBoard: current});
         },
 
@@ -78,14 +87,14 @@ $(function() {
         },
 
         render: function(){
-            var buttonDimension = ($("#sudoku").width())/22; 
-            var style={height:buttonDimension, fontSize:buttonDimension};
+            var buttonDimension = ($("#sudoku").width())/5; 
+            var style={width:buttonDimension};
 
             this.state.displayBoard = [];
             if (this.state.initialBoard !== null && this.state.currentBoard !== null){
                 for (var row=0; row<9; row++){
                     var stringRow = "row"+row;
-                    var localVar = (<Row ref={stringRow} update={this.update} row={row} innerValue={this.state.initialBoard[row]} value={this.state.currentBoard[row]} numSelected={this.state.numberSelected}/>);
+                    var localVar = (<Row ref={stringRow} update={this.update} row={row} innerValue={this.state.initialBoard[row]} value={this.state.currentBoard[row]} cellSelected={this.cellSelected}/>);
                     this.state.displayBoard.push(localVar);
                 }
 
@@ -103,7 +112,7 @@ $(function() {
                     Click a number to play below.<br/>Then, click on the board where you would like it to go.
                     </p>
                     <div id='numbers'>
-                        <Numbers numSelected={this.numberSelected}/>
+                        <Numbers numSelected={this.numberSelected} update={this.update}/>
                         <Highlight numSelected={this.state.numberSelected} />
                     </div>
                     <div id='table-div'>
@@ -138,7 +147,6 @@ $(function() {
     
     var Highlight = React.createClass({
         highlight: function(){
-            // $$("body").find($(".flash")).removeClass('flash');
             $(".cell-btn:contains("+this.props.numSelected+")").addClass('flash');
             var num = this.props.numberSelected
             setTimeout(function(){$(".cell-btn").removeClass("flash");}, 1000);
@@ -180,7 +188,7 @@ $(function() {
             var displayRow= [];
             for (var col=0; col<9; col++){
                 var stringCol = "cell"+col;
-                displayRow.push(<Cell ref={stringCol} update={this.props.update} row={this.props.row} column={col} innerValue={this.props.innerValue[col]} value={this.props.value[col]} numSelected={this.props.numSelected}/>);
+                displayRow.push(<Cell ref={stringCol} update={this.props.update} row={this.props.row} column={col} innerValue={this.props.innerValue[col]} value={this.props.value[col]} cellSelected={this.props.cellSelected}/>);
             }
             return (
                 <tr>{displayRow}</tr>
@@ -213,7 +221,7 @@ $(function() {
     var Cell = React.createClass({
 
         getInitialState: function(){
-            return {permanent: (isNaN(parseInt(this.props.value)) ? false : true), flash: false};
+            return {permanent: (isNaN(parseInt(this.props.value)) ? false : true), clicked: null, flash: false};
         },
 
         flashCell: function(row, col){
@@ -221,8 +229,15 @@ $(function() {
         },
 
         clickedCell: function(evt){
-            if (this.props.numSelected && this.state.permanent === false){
-                this.props.update(this.props.row, this.props.column, this.props.numSelected);
+            // if (this.props.numSelected && this.state.permanent === false){
+            // }
+            if (this.state.permanent === false){
+                this.setState({clicked: true});
+                console.log("in clicked cell");
+                $(".btn-board").removeClass("change-background");
+                // $(evt.target).addClass("change-background");
+                // this.setState({clicked: false});
+                this.props.cellSelected(this.props.row, this.props.column);
             }
         },
 
@@ -231,10 +246,18 @@ $(function() {
             var style={width:cellDimension, height:cellDimension, fontSize:cellDimension, padding:0, lineHeight:".75em" };
             if (this.state.permanent === true){
                 style.fontWeight ="bold";
+                style.pointerEvents = 'none';
             }else{
                 style.color="grey";
             }
-            return <td><button style={style} className={this.state.flash ? "btn-board cell-btn btn-default btn flash" : "btn-board btn btn-default cell-btn"} onClick={this.clickedCell}>{isNaN(parseInt(this.props.value)) ? String.fromCharCode(20) : this.props.value}</button></td>
+            var btnClass = classNames({
+                "btn-board" : true,
+                "cell-btn" : true,
+                "btn-default" : true,
+                "flash": this.state.flash,
+                "change-background": this.state.clicked
+            });
+            return <td><button style={style} className={btnClass} onClick={this.clickedCell}>{isNaN(parseInt(this.props.value)) ? String.fromCharCode(20) : this.props.value}</button></td>
         }
 
 
@@ -243,16 +266,23 @@ $(function() {
     var Numbers = React.createClass({
         changeNumber: function(evt){
             this.props.numSelected(evt.target.innerHTML);
-            $(".numberButton").removeClass("change-background");
-            $(evt.target).addClass("change-background");
+            this.props.update(evt.target.innerHTML);
+            // $(".numberButton").removeClass("change-background");
+            // $(evt.target).addClass("change-background");
         },
 
         render: function(){
             var cellDimension = ($("#sudoku").width())/14;                  ;
             var style={width:cellDimension, padding:0, height:cellDimension, fontSize:cellDimension, lineHeight:".75em", marginTop:20};
+            var btnClass = classNames({
+                "numberButton": true,
+                "btn-board" : true,
+                "btn" : true,
+                "btn-default" : true
+            });
             return (
                 <div>
-                    <button className="numberButton btn-board btn btn-default" style={style} onClick={this.changeNumber}>{String.fromCharCode(20)}</button>
+                    <button className={btnClass} style={style} onClick={this.changeNumber}>{String.fromCharCode(20)}</button>
                     <button className="numberButton btn-board btn btn-default" style={style} onClick={this.changeNumber}>1</button>
                     <button className="numberButton btn-board btn btn-default" style={style} onClick={this.changeNumber}>2</button>
                     <button className="numberButton btn-board btn btn-default" style={style} onClick={this.changeNumber}>3</button>
