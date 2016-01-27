@@ -11,12 +11,11 @@ $(function() {
 
            if ($('.intro').width() <= 767 ){
 
-                $(".btn-board").width(($("#sudoku").width())/10)
-                $(".btn-board").height(($("#sudoku").width())/10)
+                $(".btn-board").width(($("#sudoku").width())/11);
+                $(".btn-board").height(($("#sudoku").width())/11);
 
-           // }
+           }
 
-    });
 
     var Board = React.createClass({
         getInitialState: function(){ 
