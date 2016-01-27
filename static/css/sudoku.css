@@ -263,7 +263,7 @@ a:focus {
     color: #fff;
 }
     
-@media(min-width:767px) {
+@media(min-width:768px) {
     .content-section {
         padding-top: 250px;
     }
@@ -283,6 +283,12 @@ a:focus {
     font-size: 2em;
 }
 
+@media(max-width:767px) {
+    .control-button {
+        font-size: 1.3em;
+    }
+
+}
 .btn {
     border-radius: 0;
     /*text-transform: uppercase;*/

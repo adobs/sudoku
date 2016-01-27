@@ -1,4 +1,5 @@
 // make buttons text fit in buttons on mobile.
+// make cell buttons bigger on smaller device
 // make responsive when resizing window 
 // download bootstrap and react
 // add the three buttons in the nav bar
