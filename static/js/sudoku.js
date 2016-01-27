@@ -4,6 +4,9 @@
 // add the three buttons in the nav bar
 $(function() {
 
+    $(".intro").height($(window).height());
+    $(".about").height($(window).height());
+
 
     var Board = React.createClass({
         getInitialState: function(){ 
