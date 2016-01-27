@@ -5,7 +5,7 @@
 $(function() {
 
     $(".intro").height($(window).height());
-    $(".about").height($(window).height());
+    $("#about").height($(window).height());
 
 
     var Board = React.createClass({

@@ -155,7 +155,7 @@ a:focus {
     -o-background-size: cover;
 }
 
-.about{
+#about{
     display: table;
     width: 100%;
     /*height: auto;*/
@@ -184,7 +184,7 @@ a:focus {
 }
 
 @media(min-width:768px) {
-    .intro, .about{
+    .intro, #about{
         /*height: 100%;*/
         padding: 0;
     }
