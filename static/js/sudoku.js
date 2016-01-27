@@ -1,12 +1,13 @@
 // make cell buttons bigger on smaller device
 // make responsive when resizing window 
 // download bootstrap and react
-// add the three buttons in the nav bar
 $(function() {
 
     $(".intro").height($(window).height());
     $("#about").height($(window).height());
 
+    var fontSize = $(".control-button").height();
+    $(".control-button").css("font-size", fontSize);
 
     var Board = React.createClass({
         getInitialState: function(){ 
