@@ -1,6 +1,5 @@
-// make cell buttons bigger on smaller device
-// make responsive when resizing window 
 // download bootstrap and react
+// fix buttons on ipad
 $(function() {
 
     $(".intro").height($(window).height());

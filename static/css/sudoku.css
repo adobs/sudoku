@@ -156,6 +156,9 @@ a:focus {
     /*height: auto;*/
     padding: 100px 0;
 }
+#about-div{
+    margin-top: 100px;
+}
 
 #page-body{
     background: url(/static/img/about-background.png) no-repeat bottom center scroll;
