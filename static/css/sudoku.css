@@ -285,7 +285,10 @@ a:focus {
 
 @media(max-width:767px) {
     .control-button {
-        font-size: 1.3em;
+        font-size: 0.8em;
+        padding: 1px;
+        margin-left: 2px;
+        margin-right: 2px;
     }
 
 }
