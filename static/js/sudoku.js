@@ -4,6 +4,7 @@ $(function() {
 
     $(".intro").height($(window).height());
     $("#about").height($(window).height());
+    $("#about-div").css("margin-top", ($(window).height()/2)-100);
 
     var fontSize = $(".control-button").height();
     $(".control-button").css("font-size", fontSize);
